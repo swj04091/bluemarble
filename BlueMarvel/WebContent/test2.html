@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>sample</title>
+<style>
+   td{
+      font-size:9px;
+      width: 150px;
+       height: 80px;
+       text-align:center;
+   }
+   .gold {
+      font-size:20px;
+      font-type:bold;
+   }
+</style>
+</head>
+<link rel="stylesheet" href="/BlueMarvel/css/jquery-ui.css">
+<script src="/BlueMarvel/scripts/jquery-3.4.1.min.js"></script>
+<script src="/BlueMarvel/scripts/jquery-ui.js"></script>
+<script src="/BlueMarvel/scripts/player.js"></script>
+<script src="/BlueMarvel/scripts/city.js"></script>
+<script src="/BlueMarvel/scripts/goldenkey.js"></script>
+<body>
+<h3>
+   부르마블
+   <button type="button" id="diceBtn">King Dice!</button>
+   현재 플레이어 : <input type="text" id="player" value="">
+   주사위 값 : <input type="text" id="diceValue" value="">
+   이동지점 : <input type="text" id="point" value="">
+</h3>
+<div id="allPlayer">
+</div>
+<table border="1">
+   <tr>
+        <!-- 나라태그, player:땅의 주인을 확인하는 클래스, city:도시의 이름을 확인하는 클래스, gold:도시의 가격을 확인하는 클래스 주인이없으면 땅값이 출력 -->
+      <td id="p1">
+         <div class="player">0</div>
+         Start
+         <div class="gold">1</div>
+         <button class='btn-danger1'><img src='/BlueMarvel/images/p1.png'></button>
+         <button class='btn-danger2'><img src='/BlueMarvel/images/p2.png'></button>
+      </td>
+      <td id="p2"><div class="player">0</div><div class="city">타이페이</div><div class="gold">50000</div></td>
+      <td id="p3"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
+      <td id="p4"><div class="player">0</div><div class="city">베이징</div><div class="gold">80000</div></td>
+      <td id="p5"><div class="player">0</div><div class="city">마닐라</div><div class="gold">80000</div></td>
+      <td id="p6"><div class="player">0</div><div class="city">제주도</div><div class="gold">200000</div></td>
+      <td id="p7"><div class="player">0</div><div class="city">싱가포르</div><div class="gold">100000</div></td>
+      <td id="p8"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
+      <td id="p9"><div class="player">0</div><div class="city">카이로</div><div class="gold">100000</div></td>
+      <td id="p10"><div class="player">0</div><div class="city">이스탄불</div><div class="gold">120000</div></td>
+      <td id="p11"><div class="player">0</div><div class="island">무인도</div><div class="gold">11</div></td>
+   </tr>
+   <tr>
+      <td id="p40"><div class="player">0</div><div class="city">서울</div><div class="gold">1000000</div></td>
+      <td rowspan="9" colspan="9"> </td>
+      <td id="p12"><div class="player">0</div><div class="city">아테네</div><div class="gold">140000</div></td>
+   </tr>
+   <tr>
+      <td id="p39"><div class="player">0</div><div class="found">사회복지기금</div><div class="gold">39</div></td>
+      
+      <td id="p13"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
+   </tr>
+   <tr>
+      <td id="p38"><div class="player">0</div><div class="city">뉴욕</div><div class="gold">350000</div></td>
+      
+      <td id="p14"><div class="player">0</div><div class="city">코펜하겐</div><div class="gold">160000</div></td>
+   </tr>
+   <tr>
+      <td id="p37"><div class="player">0</div><div class="city">런던</div><div class="gold">350000</div></td>
+      
+      <td id="p15"><div class="player">0</div><div class="city">스톡홀름</div><div class="gold">160000</div></td>
+   </tr>
+   <tr>
+      <td id="p36"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
+      
+      <td id="p16"><div class="player">0</div><div class="city">콩코드여객기</div><div class="gold">200000</div></td>
+   </tr>
+   <tr>
+      <td id="p35"><div class="player">0</div><div class="city">로마</div><div class="gold">320000</div></td>
+      
+      <td id="p17"><div class="player">0</div><div class="city">베른</div><div class="gold">180000</div></td>
+   </tr>
+   <tr>
+      <td id="p34"><div class="player">0</div><div class="city">파리</div><div class="gold">320000</div></td>
+      
+      <td id="p18"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
+   </tr>
+   <tr>
+      <td id="p33"><div class="player">0</div><div class="city">콜럼비아호</div><div class="gold">450000</div></td>
+      
+      <td id="p19"><div class="player">0</div><div class="city">베를린</div><div class="gold">180000</div></td>
+   </tr>
+   <tr>
+      <td id="p32"><div class="player">0</div><div class="city">도쿄</div><div class="gold">300000</div></td>
+      
+      <td id="p20"><div class="player">0</div><div class="city">오타와</div><div class="gold">200000</div></td>
+   </tr>
+   <tr>
+      <td id="p31"><div class="player">0</div><div class="spacetravel">우주여행</div><div class="gold">31</div></td>
+      <td id="p30"><div class="player">0</div><div class="city">마드리드</div><div class="gold">280000</div></td>
+      <td id="p29"><div class="player">0</div><div class="city">퀸엘리자베스호</div><div class="gold">300000</div></td>
+      <td id="p28"><div class="player">0</div><div class="city">리스본</div><div class="gold">260000</div></td>
+      <td id="p27"><div class="player">0</div><div class="city">하와이</div><div class="gold">260000</div></td>
+      <td id="p26"><div class="player">0</div><div class="city">부산</div><div class="gold">500000</div></td>
+      <td id="p25"><div class="player">0</div><div class="city">시드니</div><div class="gold">240000</div></td>
+      <td id="p24"><div class="player">0</div><div class="city">쌍파울로</div><div class="gold">240000</div></td>
+      <td id="p23"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
+      <td id="p22"><div class="player">0</div><div class="city">부에노스아이레스</div><div class="gold">220000</div></td>
+      <td id="p21"><div class="player">0</div><div class="found">시회복지기금</div><div class="gold">21</div></td>
+   </tr>
+</table>
+<!-- dialog태그 넣는곳 -->
+<div id="dialogTag">
+</div>
+-->
+</body>
+<script>
+   $(document).ready(function(){
+     $("#diceBtn").attr("disabled", true);
+     //인원수 파악
+     start = false;
+     let allPlayer = "";
+     while(start == false) {
+        allPlayer = prompt("몇명이서 플레이합니까? (1~4까지의 숫자만 입력가능)");
+        if(allPlayer > 0 && allPlayer < 5){
+           alert("게임시작")
+           $("#diceBtn").attr("disabled", false);
+           start = true;
+        } else {
+           alert("다시입력")
+           start = false;
+        }
+     }
+     for(i=1; i < parseInt(allPlayer)+1; i++){
+        let playerHtml = "플레이어"+i+" 돈 : <input type='text' id='player"+i+"money' value='3000000'>";
+        $("#allPlayer").append(playerHtml);
+     }
+     //플레이어
+      let player = 0;
+     
+     let KARD = [["황금열쇠이름", "내용", "상세정보"]];
+      $.ajax({
+	   		 url:"/BlueMarvel/scripts/황금열쇠.json",
+	   		 method:"POST",
+	   		 async:false,
+	   		 success:function(json){
+	   			$.each(json, function(index, item){
+	    			  KARD.push([item.황금열쇠이름, item.내용, item.상세정보]);
+					});
+	   		 }
+	   	  });
+     
+      console.log(KARD);
+      console.log(KARD[1]);
+      let cardmoney = 0;
+      //주사위 클릭시
+      $("#diceBtn").click(function(){
+        let dialogHtml = "<div id='dialog' title='도시이름'>대지 <input type='radio' name='build' id='land' checked='checked'><span id='landToll'></span><br>별장 <input type='radio' name='build' id='villa'><span id='villaToll'></span><br>빌딩 <input type='radio' name='build' id='building'><span id='buildingToll'></span><br>호텔 <input type='radio' name='build' id='hotel'><span id='hotelToll'></span><br><button type='button' id='buy'>구매</button><button type='button' id='cancel'>취소</button></div>";
+        $("#dialogTag").append(dialogHtml);
+        player++;
+        if(player>allPlayer){
+            player = 1;
+         }
+        $("#player").val(player);
+         //주사위 세팅(1~6까지 숫자 랜덤)
+         let ran = Math.floor(Math.random()*6+1);
+         $("#diceValue").val(ran);
+         console.log("gamer : ",player);
+         //플레이어 구분
+         switch(player){
+           case 1:
+              gamer = Player1;
+              console.log("Player1");
+              break;
+           case 2:
+              gamer = Player2;
+              console.log("Player2");
+              break;
+           case 3:
+              gamer = Player3;
+              console.log("Player3");
+              break;
+           case 4:
+              gamer = Player4;
+              console.log("Player4");
+              break;
+         }
+         $("#player"+player+"money").val(gamer.money);
+            //주사위를 굴렸을때 이동지점
+            if(gamer.beforePoint+ran < 41){
+               gamer.afterPoint = gamer.beforePoint+ran;
+            } else {
+               gamer.afterPoint = gamer.beforePoint+ran-40;
+            }
+            $("#point").val(gamer.afterPoint);
+            //이동한 지점에 유저 버튼 생성
+            let html = "<img class='btn-danger"+player+"' src='/BlueMarvel/images/p"+player+".png'>";
+            gamer.beforeId = "#p"+gamer.beforePoint;
+            gamer.afterId = "#p"+gamer.afterPoint;
+            $(gamer.afterId).append(html);
+            $(gamer.beforeId).find(".btn-danger"+player).remove();
+            gamer.beforePoint = gamer.afterPoint;
+            
+            //밟은 땅 주인 체크
+           if($(gamer.afterId).find(".player").text() == 0){
+               cityName = $(gamer.afterId).find(".city").text();
+               console.log("cityName : ", cityName);
+               let city = "";
+               switch(cityName){
+                  case "타이페이":
+                     city = 타이페이;
+                     break;
+                  case "베이징":
+                     city = 베이징;
+                     break;
+                  case "마닐라":
+                     city = 마닐라;
+                     break;
+                  case "제주도":
+                     city = 제주도;
+                     break;
+                  case "싱가포르":
+                     city = 싱가포르;
+                     break;
+                  case "카이로":
+                     city = 카이로;
+                     break;
+                  case "이스탄불":
+                     city = 이스탄불;
+                     break;
+                  case "아테네":
+                     city = 아테네;
+                     break;
+                  case "코펜하겐":
+                     city = 코펜하겐;
+                     break;
+                  case "스톡홀름":
+                     city = 스톡홀름;
+                     break;
+                  case "콩코드여객기":
+                     city = 콩코드여객기;
+                     break;
+                  case "베른":
+                     city = 베른;
+                     break;
+                  case "베를린":
+                     city = 베를린;
+                     break;
+                  case "오타와":
+                     city = 오타와;
+                     break;
+                  case "부에노스아이레스":
+                     city = 부에노스아이레스;
+                     break;
+                  case "상파울로":
+                     city = 상파울로;
+                     break;
+                  case "시드니":
+                     city = 시드니;
+                     break;
+                  case "부산":
+                     city = 부산;
+                     break;
+                  case "하와이":
+                     city = 하와이;
+                     break;
+                  case "리스본":
+                     city = 리스본;
+                     break;
+                  case "퀸엘리자베스호":
+                     city = 퀸엘리자베스호;
+                     break;
+                  case "마드리드":
+                     city = 마드리드;
+                     break;      
+                  case "도쿄":
+                     city = 도쿄;
+                     break;
+                  case "콜럼비아호":
+                     city = 콜럼비아호;
+                     break;
+                  case "파리":
+                     city = 파리;
+                     break;
+                  case "로마":
+                     city = 로마;
+                     break;   
+                  case "런던":
+                     city = 런던;
+                     break;      
+                  case "뉴욕":
+                     city = 뉴욕;
+                     break;      
+                  case "서울":
+                     city = 서울;
+                     break;
+                  default:
+                     city = null;
+                     break;
+               }
+               console.log(city);
+               if(city != null){
+                  //땅 구매여부를 선택할때까지 주사위 비활성화
+                   $("#diceBtn").attr("disabled", true);
+                   $("#dialog").dialog();
+                   if(city == 제주도 || city == 콩코드여객기 || city == 부산 || city == 퀸엘리자베스호 || city == 콜럼비아호 || city == 서울){
+                      $("#villa").attr("disabled", true);
+                      $("#building").attr("disabled", true);
+                      $("#hotel").attr("disabled", true);
+                   } else {
+                      $("#villa").attr("disabled", false);
+                      $("#building").attr("disabled", false);
+                      $("#hotel").attr("disabled", false);
+                   }
+                   $("#landToll").text(" 통행료 "+ city.대지료통행시+"원");
+                   $("#villaToll").text(" 통행료 "+ city.별장통행시+"원");
+                   $("#buildingToll").text(" 통행료 "+ city.빌딩통행시+"원");
+                   $("#hotelToll").text(" 통행료 "+ city.호텔통행시+"원");
+                   $("#buy").click(function(){
+                      console.log("buy 클릭 실행!");
+                      console.log("buy player : ", player);
+                      if($('input[name="build"]:checked').is("#land")){
+                         console.log("땅 구매 : ", player);
+                         //땅 주인 세팅 (플레이어1 이면 1 이 들어감)
+                            $(gamer.afterId).find(".player").text(player);
+                             //주인이없으면 땅 가격 세팅
+                             $(gamer.afterId).find(".gold").text(city.대지료통행시);
+                             console.log("대지료구매 전 머니", gamer.money);
+                             console.log("구매료 : ", city.대지료구매);
+                             gamer.money = gamer.money-city.대지료구매;
+                             console.log("대지료구매 후 머니", gamer.money);
+                             $("#player"+player+"money").val(gamer.money);
+                      }
+                      if($('input[name="build"]:checked').is("#villa")){
+                         //별장 주인 세팅 (플레이어1 이면 1 이 들어감)
+                            $(gamer.afterId).find(".player").text(player);
+                            //주인이없으면 별장 가격 세팅
+                            $(gamer.afterId).find(".gold").text(city.별장통행시);
+                            console.log("별장구매 전 머니", gamer.money);
+                            console.log("구매료 : ", city.대지료구매+city.별장구매);
+                             gamer.money = gamer.money-city.대지료구매-city.별장구매;
+                             console.log("별장구매 후 머니", gamer.money);
+                             $("#player"+player+"money").val(gamer.money);
+                             
+                      }
+                      if($('input[name="build"]:checked').is("#building")){
+                         //빌딩 주인 세팅 (플레이어1 이면 1 이 들어감)
+                            $(gamer.afterId).find(".player").text(player);
+                            //주인이없으면 빌딩 가격 세팅
+                            $(gamer.afterId).find(".gold").text(city.빌딩통행시);
+                            console.log("빌딩구매 전 머니", gamer.money);
+                            console.log("구매료 : ", city.대지료구매+city.빌딩구매);
+                             gamer.money = gamer.money-city.대지료구매-city.빌딩구매;
+                             console.log("빌딩구매 후 머니", gamer.money);
+                             $("#player"+player+"money").val(gamer.money);
+                      }
+                      if($('input[name="build"]:checked').is("#hotel")){
+                         //호텔 주인 세팅 (플레이어1 이면 1 이 들어감)
+                            $(gamer.afterId).find(".player").text(player);
+                            //호텔 가격 세팅
+                            $(gamer.afterId).find(".gold").text(city.호텔통행시);
+                            console.log("호텔구매 전 머니", gamer.money);
+                            console.log("구매료 : ", city.대지료구매+city.호텔구매);
+                             gamer.money = gamer.money-city.대지료구매-city.호텔구매;
+                             console.log("호텔구매 후 머니", gamer.money);
+                             $("#player"+player+"money").val(gamer.money);
+                      }
+                        //주사위 활성화
+                      $("#diceBtn").attr("disabled", false);
+                        //dialog 닫기
+                      $("#dialog").dialog("close");
+                      $("#dialog").remove();
+                   })
+                   $("#cancel").click(function(){
+                      //dialog 닫기
+                      $("#diceBtn").attr("disabled", false);
+                      $("#dialog").dialog("close");
+                      $("#dialog").remove();
+                   });
+               } else {
+            	 //황금열쇠 확인
+                   if($(gamer.afterId).find(".goldenkey")) {
+                	      
+       	                  let random = Math.floor(Math.random()*30+1);
+       	                  //let random = 1;
+       	               	  kard = KARD[random];
+       	                  console.log("황금열쇠 "+random);
+       	                  console.log(kard)
+       	                  setTimeout(function() {
+       	                  alert(kard);
+       	                  }, 0)
+       	                  //ISSUE: 이동하는 카드를 뽑으면 이동은 되지만, 다음 주사위를 굴릴때 전에 있던 위치에서 출발
+       	                  switch(random){
+       	                  	case 0:	//병원비 지불
+       	                  		minusMoney(player,50000);
+       	                  		break;
+       	                  	case 1:	//복권당첨
+	   	                  		plusMoney(player,200000);
+       	                  		break;
+       	                  	case 2:	//무인도 탈출
+       	                  		//$("#playerItem").append("<button type='button' id='kwon'>무인도탈출권</button>");
+       	                  		break;
+       	                  	case 3: //무인도
+       	                  		cardMove(player,11,11);
+       	                  		break;
+       	                  	case 4: //파티초대권
+       	                  		
+       	                  		break;
+       	                  	case 5: //관광여행(제주)
+       	                  		cardMove(player,6,6);
+       	                  		break;
+       	                  	case 6: //과속운전벌금
+       	                  		minusMoney(player,50000);
+       	                  		break;
+       	                  	case 7: //해외유학
+       	                  		minusMoney(player,100000);
+       	                  		break;
+       	                  	case 8: //노후연금
+       	                  		plusMoney(player,50000);
+       	                  		break;
+       	                  	case 9: //이사(3칸 뒤로)
+       	                  		cardMove(player,gamer.beforePoint - 3,gamer.beforePoint - 3);
+       	                  		break;
+       	                  	case 10: // 고속도로
+       	                  		cardMove(player,1,1);
+       	                  		break;
+       	        	            /*
+       	        	           	 만약에 한바퀴 도는거면 + 20만원
+       	        	            */
+       	                  	case 11: //우승
+       	                  		plusMoney(player,100000);
+	   	                  		break;
+       	                  	case 12: //우대권
+       	                  		//$("#playerItem").append("<button type='button' id='udae'>우대권</button>");
+       	                  		break;
+       	                  	case 13: //항공여행(콩코드 -> 타이페이)
+       	                  		cardMove(player,2,2);
+       	                  		break;
+       	                  		/*
+       	                  		만약에 콩코드 여객기를 누군가 가지고 있으면 결제, 타이페이도 마찬가지로 결제
+       	                  		*/
+       	                  	case 14: //건물수리비
+       	                  		/*
+       	                  		플레이어가 가지고 있는 건물을 호텔, 빌딩 , 별장의 갯수만큼 아래 가격과 합산해서 결제
+       	                  		호텔--10만원  빌딩--6만원 별장--3만원
+       	                  		*/
+       	                  		break;
+       	                  	case 15: //방범비
+       	                  		/*
+       	                  		호텔--5만원  빌딩--3만원 별장--1만원
+       	                  		*/
+       	                  		break;
+       	                  	case 16: //유람선여행(퀸엘리자베스-> 베이징)
+       	                  		cardMove(player,4,4)
+       	                  		break;
+       	                  		/*
+       	                  		퀸엘리자베스호 결제, 베이징 결제
+       	                  		*/
+       	                  	case 17: //관광여행(부산)
+       	                  		cardMove(player,26,26)
+       	                  		break;
+       	                  		/*
+       	                  		부산 결제
+       	                  		*/
+       	                  	case 18: // 생일 축하
+       	                  		let birth =  10000 * (allPlayer-1);
+       	                  		plusMoney(player,birth);
+       	                  		break;
+       	                  	case 19: //장학금 혜택
+       	                  		plusMoney(player,100000);
+       	                  		break;
+       	                  	case 20: //종합소득세
+       	                  		/*
+       	                  		호텔-- 15만원  빌딩-- 10만원  별장--3만원
+       	                  		플레이어가 가지고 있는 호텔 빌딩 별장수 만큼 결제
+       	                  		*/
+       	                  		break;
+       	                  	case 21: //노벨평화상
+       	                  		plusMoney(player,300000);
+	   	                  		break;
+       	                  	case 22: //관광여행(서울)
+       	                  		cardMove(player,40,40);
+       	                  		break;
+       	                  		/*
+       	                  		서울에서 결제
+       	                  		*/
+       	                  	case 23: //반액대매출
+       	                  		/*
+       	                  		가지고 있는 곳 중에 건물가격 포함해서 가장 비싼 곳을 반값에 판매
+       	                  		*/
+       	                  		break;
+       	                  	case 24: //우주여행 초청장
+       	                  		cardMove(player,31,31);
+       	                  		break;
+       	                  	case 25: //우대권
+       	                  		//$("#playerItem").append("<button type='button' id='udae'>우대권</button>");
+       	                  	case 26: //세계일주 초대권
+       	                  		plusMoney(player,200000);
+	   	                  		break;
+       	                  	case 27: //이사(뒤로 두칸)
+       	                  		cardMove(player,beforePoint - 2,beforePoint - 2)
+       	                  		break;
+       	                  	case 28: //사회복지기금배당
+       	                  		cardMove(player,39,39)
+       	                  		minusMoney(player,150000);
+       	                  		break;
+       	                  		/*
+       	                  		15만원을 사회복지기금에 배당
+       	                  		*/
+       	                  	case 29: //반액대매출
+       	                  		/*
+       	                  		가지고 있는 곳 중에 건물가격 포함해서 가장 비싼 곳을 반값에 판매
+       	                  		*/
+       	                  		break;	
+       	                  		
+       	                  }
+       	                
+       	                  //alert(goldenKey[0]+"\r\n"+goldenKeymsg[0]+"\r\n"+goldenKeyeffect[0]);
+       	            }
+                  $("#dialog").remove();
+               }
+            } else {
+               //주인이 있으면 땅 가격만큼 가진 돈에서 차감
+               console.log("결제 전 머니: ", gamer.money);
+               gamer.money = gamer.money-($(gamer.afterId).find(".gold").text());
+               console.log("결제 후 머니: ", gamer.money);
+               $("#player"+player+"money").val(gamer.money);
+               $("#dialog").remove();
+            }
+      });
+   });
+</script>
+</html>

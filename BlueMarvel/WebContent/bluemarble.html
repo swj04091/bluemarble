@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>부르마블</title>
+<style>
+	td{
+	     font-size:9px;
+	     width: 150px;
+	     height: 80px;
+	     text-align:center;
+	   }
+</style>
+<script src="/BlueMarvel/scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="/BlueMarvel/scripts/d3.min.js"></script>
+
+</head>
+<body>
+<h1>부르마블</h1>
+<div>
+	<button type="button" id="dice">주사위굴리기</button>
+	주사위값: <input type="text" id="diceNum" value="">
+	이동지점 : <input type="text" id="point" value="">
+	플레이어 돈: <input type="text" id="money" value="">
+	플레이어 아이템: <div id="playerItem"></div>
+	
+</div>
+<table id="board" border="1">
+	<tr>
+		<td id="c1">Start<img src="/BlueMarvel/images/p1.png" id="player1"></td>
+		<td id="c2">타이페이</td>
+		<td id="c3" class="goldenKey">황금카드</td>
+		<td id="c4">베이징</td>
+		<td id="c5">마닐라</td>
+		<td id="c6">제주도</td>
+		<td id="c7">싱가포르</td>
+		<td id="c8" class="goldenKey">황금카드</td>
+		<td id="c9">카이로</td>
+		<td id="c10">이스탄불</td>
+		<td id="c11">무인도</td>
+	</tr>
+	<tr>
+		<td id="c40">서울</td>
+		<td rowspan="9" colspan="9"><img src="/BlueMarvel/images/hots-logo.png">
+		<div id="center"></div></td>
+		<td id="c12">아테네</td>
+	</tr>
+	<tr>
+		<td id="c39">사회복<br>지기금</td>
+		<td id="c13" class="goldenKey">황금카드</td>
+	</tr>
+	<tr>
+		<td id="c38">뉴욕</td>
+		<td id="c14">코펜하겐</td>
+	</tr>
+	<tr>
+		<td id="c37">런던</td>
+		<td id="c15">스톡홀름</td>
+	</tr>
+	<tr>
+		<td id="c36" class="goldenKey">황금열쇠</td>
+		<td id="c16">콩코드<br>여객기</td>
+	</tr>
+	<tr>
+		<td id="c35">로마</td>
+		<td id="c17">베른</td>
+	</tr>
+	<tr>
+		<td id="c34">파리</td>
+		<td id="c18" class="goldenKey">황금카드</td>
+	</tr>
+	<tr>
+		<td id="c33">콜럼비아호</td>
+		<td id="c19">베를린</td>
+	</tr>
+	<tr>
+		<td id="c32">도쿄</td>
+		<td id="c20">오타와</td>
+	</tr>
+	<tr>
+		<td id="c31">우주여행</td>
+		<td id="c30">마드리드</td>
+		<td id="c29">퀸엘리자<br>베스호</td>
+		<td id="c28">리스본</td>
+		<td id="c27">하와이</td>
+		<td id="c26">부산</td>
+		<td id="c25">시드니</td>
+		<td id="c24">쌍파울로</td>
+		<td id="c23" class="goldenKey">황금카드</td>
+		<td id="c22">부에노스<br>아이레스</td>
+		<td id="c21">시회복<br>지기금</td>
+	</tr>
+</table>
+</body>
+
+<script>
+	$(document).ready(function(){
+	  
+	  let playermoney = 3000000;
+	  //플레이어1 이동 전 지점
+      let beforePoint1 = 1;
+      //플레이어1 이동 후 지점
+      let afterPoint1 = 1;
+    
+      /**
+       * 
+       */
+      let goldenKey= new Array(
+      		"병원비 지불",
+      		"복권 당첨",
+              "무인도 탈출",
+              "무인도",
+              "파티초대권",
+              "관광여행",
+              "과속운전벌금",
+              "해외유학",
+              "연금 해택",
+              "이사",
+              "고속도로",
+              "우승",
+              "우대권",
+              "항공여행",
+              "건물 수리비",
+              "방범비",
+              "유람선여행",
+              "관광여행",
+              "생일축하",
+              "장학금 혜택",
+              "종합소득세",
+              "노벨평화상",
+              "관광여행",
+              "반액대매출",
+              "우주여행 초청장",
+              "우대권",
+              "세계일주 초대권",
+              "이사",
+              "사회복지기금배당",
+              "반액대매출"
+          )
+
+      let goldenKeymsg = new Array(
+      	"병원에서 건강진단을 받았습니다.",
+          "축하합니다. 복권에 당첨되었습니다.",
+          "특수무전기",
+          "폭풍을 만났습니다. 무인도로 곧장 가세요.",
+          "대중 앞에서 장기자랑을 하세요.",
+          "제주로 가세요",
+          "과속운전을 하였습니다.",
+          "학교에 등록금을 내세요.",
+          "노후연금을 받으세요.",
+          "뒤로 세칸 옮기세요.",
+          "출발지까지 곧바로 가세요.",
+          "자동차 경주에서 챔피언이 되었습니다.",
+         	"상대방이 소유한 장소에 통행료없이 머무를 수 있습니다.",
+          "콩코드 여객기를 타고 타이베이로 가세요.",
+          "정기적으로 건물을 수리하여야 합니다.",
+          "방범비를 각 건물별로 다음과 같이 은행에 지불하세요.",
+          "퀸 엘리자베스호를 타고 베이징으로 가세요.",
+          "부산으로 가세요.",
+          "모두에게 생일 축하를 받으세요.",
+          "장학금을 받으세요.",
+          "종합소득세를 각 건물별로 아래와 같이 은행에 납부하세요.",
+          "당신은 세계 평화를 위하여 공헌하였습니다.",
+          "세계의 중심 도시, 서울로 가세요.",
+          "당신의 부동산 중에서 가장 비싼곳을 반액으로 은행에 파세요.",
+          "우주항공국에서 초청장이 왔습니다(우주정류장으로 가세요.)",
+          "상대방이 소유한 장소에 통행료없이 머무를 수 있습니다.",
+          "축하합니다. 현재 위치에서 한 바퀴 돌아오세요.",
+          "뒤로 두칸 옮기세요.",
+          "사회복지기금 접수터로 가세요.",
+          "당신의 부동산 중에서 가장 비싼곳을 반액으로 은행에 파세요."
+           
+          )
+                
+      let goldenKeyeffect = new Array(
+          "병원비 5만원을 은행에 납부합니다.",
+          "당첨금 20만원을 은행에서 받습니다.",
+          "1.무인도에 갇혀 있을 때 사용할 수 있습니다. 2. 1회 사용후 반납합니다. 3. 타인에게 팔 수 있습니다.(20만원)",
+          "출발지를 지나더라도 월급을 받을 수 없습니다.",
+          "다른 게임 참가자들이 정한 상금을 은행에서 받습니다.",
+          "1. 제주를 상대방이 가지고 있을 경우, 통행료를 지불합니다. 2. 출발지를 지나갈 경우, 월급을 받습니다.",
+          "범칙금 5만원을 은행에 납부합니다.",
+          "등록금 10만원을 은행에 납부합니다.",
+          "연금 5만원을 은행에서 받습니다.",
+          " ",
+          "출발지에서 월급을 받습니다.",
+          "상금 10만원을 은행에서 받습니다.",
+          "1. 1회사용 후, 황금열쇠함에 반납 합니다. 2. 중요한 순간에 쓰세요.",
+          "1. 콩코드 여객기를 상대방이 가지고 있을 경우 탑승료(30만원)을 지불합니다. 2. 출발지를 지나갈 경우 월급을 받습니다.",
+          "호텔--10만원  빌딩--6만원 별장--3만원",
+          "호텔--5만원  빌딩--3만원 별장--1만원",
+          "1. 퀸엘리자베스호를 상대방이 가지고 있울 경우, 탑승료(25만원)을 지불합니다. 2. 출발지를 지나갈경우, 월급을 받습니다.",
+          "1. 부산을 상대방이 가지고 있을 경우, 통행료를 지불합니다. 2. 출발ㅈ를 지나갈 경우, 월급을 받습니다.",
+          "전원에게 축하금 1만원씩 받습니다.",
+          "장학금 10만원을 은행에서 받습니다.",
+          "호텔-- 15만원  빌딩-- 10만원  별장--3만원",
+          "수상금 30만원을 은행에서 받습니다.",
+          "서울을 상대방이 가지고 있을 경우, 통행료를 지불 합니다.",
+          "건물이 지어진 경우, 반액으로 함께 처분합니다.",
+          "1. 무료이므로 컬럼비아호에 탑승료를 지불하지 않습니다. 2. 출발지를 지나갈 경우, 월급을 받습니다.",
+          "1. 1회사용 후, 황금열쇠함에 반납 합니다. 2. 중요한 순간에 쓰세요.",
+          "1. 다른 곳으로 갈 수 없습니다. 2. 출발지를 지나가면서 월급을 받습니다. 3. 사회복지기금을 지나가면서 모아놓은 기금을 받습니다.",
+          " ",
+          "출발지를 지나갈 경우, 월급을 받습니다.",
+          "건물이 지어진 경우, 반액으로 함께 처분합니다."
+        )
+      
+      $("#money").val(playermoney);
+      
+		$("#dice").click(function(){
+			 $("#center").empty();
+			 //let ran = Math.floor(Math.random()*12+1);
+			 let ran = 2;
+			 $("#diceNum").val(ran);
+			
+			 if(beforePoint1+ran < 41){
+	               afterPoint1 = beforePoint1+ran;
+	            } else {
+	               afterPoint1 = beforePoint1+ran-40;
+	            }
+	            $("#point").val(afterPoint1);
+	            //이동한 지점에 유저 버튼 생성
+	            let html = $("#player1");
+	            let beforeId1 = "#c"+beforePoint1;
+	            let afterId1 = "#c"+afterPoint1;
+	            $(afterId1).append(html);
+	            $(beforeId1).find("#c"+beforePoint1).remove();
+	            beforePoint1 = afterPoint1;
+	            console.log(afterId1);
+	            if($(afterId1).hasClass("goldenKey") === true) {
+	                  random = Math.floor(Math.random()*29+0);
+	                  console.log("황금열쇠"+random);
+	                  setTimeout(function() {
+     	                  	alert(goldenKey[random]+"\r\n"+goldenKeymsg[random]+"\r\n"+goldenKeyeffect[random]);
+     	                  }, 0.03);
+	                  //ISSUE: 이동하는 카드를 뽑으면 이동은 되지만, 다음 주사위를 굴릴때 전에 있던 위치에서 출발
+	                  switch(random){
+	                  	case 0:	//병원비 지불
+	                  		playermoney = playermoney - 50000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 1:	//복권당첨
+	                  		playermoney = playermoney + 200000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 2:	//무인도 탈출
+	                  		$("#playerItem").append("<button type='button' id='kwon'>무인도탈출권</button>");
+	                  		break;
+	                  	case 3: //무인도
+	         	            afterPoint1 = 11;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c11";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  	case 4: //파티초대권
+	                  		
+	                  		break;
+	                  	case 5: //관광여행(제주)
+	                  		afterPoint1 = 6;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c6";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  	case 6: //과속운전벌금
+	                  		playermoney = playermoney - 50000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  	case 7: //해외유학
+	                  		playermoney = playermoney - 100000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 8: //노후연금
+	                  		playermoney = playermoney + 50000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 9: //이사(3칸 뒤로)
+	                  		afterPoint1 = beforePoint1 - 3;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c"+(beforePoint1-3);
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  	case 10: // 고속도로
+	                  		afterPoint1 = 1;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c1";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	        	            playermoney = playermoney + 200000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	        	            /*
+	        	           	 만약에 한바퀴 도는거면 + 20만원
+	        	            */
+	                  		break;
+	                  	case 11: //우승
+	                  		playermoney = playermoney + 100000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 12: //우대권
+	                  		$("#playerItem").append("<button type='button' id='udae'>우대권</button>");
+	                  		break;
+	                  	case 13: //항공여행(콩코드 -> 타이페이)
+	                  		afterPoint1 = 2;
+	         	            $("#point").val(afterPoint1);	
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c2";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  		/*
+	                  		만약에 콩코드 여객기를 누군가 가지고 있으면 결제, 타이페이도 마찬가지로 결제
+	                  		*/
+	                  	case 14: //건물수리비
+	                  		/*
+	                  		플레이어가 가지고 있는 건물을 호텔, 빌딩 , 별장의 갯수만큼 아래 가격과 합산해서 결제
+	                  		호텔--10만원  빌딩--6만원 별장--3만원
+	                  		*/
+	                  		break;
+	                  	case 15: //방범비
+	                  		/*
+	                  		호텔--5만원  빌딩--3만원 별장--1만원
+	                  		*/
+	                  		break;
+	                  	case 16: //유람선여행(퀸엘리자베스-> 베이징)
+	                  		afterPoint1 = 4;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c4";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  		/*
+	                  		퀸엘리자베스호 결제, 베이징 결제
+	                  		*/
+	                  	case 17: //관광여행(부산)
+	                  		afterPoint1 = 26;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c26";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  		/*
+	                  		부산 결제
+	                  		*/
+	                  	case 18: // 생일 축하
+	                  		playermoney = playermoney + 10000; //(플레이어의 수-1) *10000
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 19: //장학금 혜택
+	                  		playermoney = playermoney + 100000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 20: //종합소득세
+	                  		/*
+	                  		호텔-- 15만원  빌딩-- 10만원  별장--3만원
+	                  		플레이어가 가지고 있는 호텔 빌딩 별장수 만큼 결제
+	                  		*/
+	                  		break;
+	                  	case 21: //노벨평화상
+	                  		playermoney = playermoney + 300000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 22: //관광여행(서울)
+	                  		afterPoint1 = 40;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c40";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  		/*
+	                  		서울에서 결제
+	                  		*/
+	                  	case 23: //반액대매출
+	                  		/*
+	                  		가지고 있는 곳 중에 건물가격 포함해서 가장 비싼 곳을 반값에 판매
+	                  		*/
+	                  		break;
+	                  	case 24: //우주여행 초청장
+	                  		afterPoint1 = 31;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c31";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  	case 25: //우대권
+	                  		$("#playerItem").append("<button type='button' id='udae'>우대권</button>");
+	                  	case 26: //세계일주 초대권
+	                  		playermoney = playermoney + 200000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  	case 27: //이사(뒤로 두칸)
+	                  		afterPoint1 = beforePoint1-2;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c"+(beforePoint1-2);
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		break;
+	                  	case 28: //사회복지기금배당
+	                  		afterPoint1 = 39;
+	         	            $("#point").val(afterPoint1);
+	                  		html = $("#player1");
+	        	            beforeId1 = "#c"+beforePoint1;
+	        	            afterId1 = "#c39";
+	        	            $(afterId1).append(html);
+	        	            $(beforeId1).find("#c"+beforePoint1).remove();
+	        	            beforePoint1 = afterPoint1;
+	        	            console.log(afterId1);
+	                  		playermoney = playermoney - 150000;
+	                  		console.log(playermoney);
+	                  		$("#money").val(playermoney);
+	                  		break;
+	                  		/*
+	                  		15만원을 사회복지기금에 배당
+	                  		*/
+	                  	case 29: //반액대매출
+	                  		/*
+	                  		가지고 있는 곳 중에 건물가격 포함해서 가장 비싼 곳을 반값에 판매
+	                  		*/
+	                  		break;	
+	                  		
+	                  }
+	                  //alert(goldenKey[0]+"\r\n"+goldenKeymsg[0]+"\r\n"+goldenKeyeffect[0]);
+	            }else{
+	            	console.log("통과");	            
+	            	}
+
+
+		})
+	});
+</script>
+
+</html>
