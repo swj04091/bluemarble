@@ -25,7 +25,7 @@
 <body>
 <h3>
    부르마블
-   <button type="button" id="diceBtn">King Dice!</button>
+   <button type="button" id="diceBtn">GoGo!</button>
    현재 플레이어 : <input type="text" id="player" value="">
    주사위 값 : <input type="text" id="diceValue" value="">
    이동지점 : <input type="text" id="point" value="">
@@ -59,7 +59,7 @@
       <td id="p12"><div class="player">0</div><div class="city">아테네</div><div class="gold">140000</div></td>
    </tr>
    <tr>
-      <td id="p39"><div class="player">0</div><div class="found">사회복지기금</div><div class="gold">39</div></td>
+      <td id="p39"><div class="player">0</div><div class="donaition">사회복지기금</div><div class="gold">39</div></td>
       
       <td id="p13"><div class="player">0</div><div class="goldenkey">황금열쇠</div></td>
    </tr>
@@ -382,8 +382,7 @@
                    });
                } else {
             	 //황금열쇠 확인
-                   if($(gamer.afterId).find(".goldenkey")) {
-                	      
+                   if($(gamer.afterId).find("goldenkey")) {
        	                  let random = Math.floor(Math.random()*30+1);
        	                  //let random = 1;
        	               	  kard = KARD[random];
@@ -400,6 +399,7 @@
        	                  	case 1:	//복권당첨
 	   	                  		plusMoney(player,200000);
        	                  		break;
+       	                  		
        	                  	case 2:	//무인도 탈출
        	                  		//$("#playerItem").append("<button type='button' id='kwon'>무인도탈출권</button>");
        	                  		break;
@@ -517,8 +517,17 @@
        	                  		break;	
        	                  		
        	                  }
-       	                
-       	                  //alert(goldenKey[0]+"\r\n"+goldenKeymsg[0]+"\r\n"+goldenKeyeffect[0]);
+       	            }//무인도 도착
+                   else if($(gamer.afterId).find("island")){
+       	            	console.log("무인도 도착");
+       	            }//사회복지기금
+       	            else if($(gamer.afterId).find("found")){
+       	            	console.log("사회복지기금 수령")
+       	            }//우주여행
+       	            else if($(gamer.afterId).find("spacetravel")){
+       	            	console.log("우주여행")
+       	            }else if($(gamer.afterId).find("donate")){
+       	            	console.log("기부하기")
        	            }
                   $("#dialog").remove();
                }
