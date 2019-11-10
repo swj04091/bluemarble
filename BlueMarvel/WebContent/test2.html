@@ -302,243 +302,94 @@
                      break;
                }
                console.log(city);
-               if(city != null){
-                  //땅 구매여부를 선택할때까지 주사위 비활성화
-                   $("#diceBtn").attr("disabled", true);
-                   $("#dialog").dialog();
-                   if(city == 제주도 || city == 콩코드여객기 || city == 부산 || city == 퀸엘리자베스호 || city == 콜럼비아호 || city == 서울){
-                      $("#villa").attr("disabled", true);
-                      $("#building").attr("disabled", true);
-                      $("#hotel").attr("disabled", true);
-                   } else {
-                      $("#villa").attr("disabled", false);
-                      $("#building").attr("disabled", false);
-                      $("#hotel").attr("disabled", false);
-                   }
-                   $("#landToll").text(" 통행료 "+ city.대지료통행시+"원");
-                   $("#villaToll").text(" 통행료 "+ city.별장통행시+"원");
-                   $("#buildingToll").text(" 통행료 "+ city.빌딩통행시+"원");
-                   $("#hotelToll").text(" 통행료 "+ city.호텔통행시+"원");
-                   $("#buy").click(function(){
-                      console.log("buy 클릭 실행!");
-                      console.log("buy player : ", player);
-                      if($('input[name="build"]:checked').is("#land")){
-                         console.log("땅 구매 : ", player);
-                         //땅 주인 세팅 (플레이어1 이면 1 이 들어감)
-                            $(gamer.afterId).find(".player").text(player);
-                             //주인이없으면 땅 가격 세팅
-                             $(gamer.afterId).find(".gold").text(city.대지료통행시);
-                             console.log("대지료구매 전 머니", gamer.money);
-                             console.log("구매료 : ", city.대지료구매);
-                             gamer.money = gamer.money-city.대지료구매;
-                             console.log("대지료구매 후 머니", gamer.money);
-                             $("#player"+player+"money").val(gamer.money);
-                      }
-                      if($('input[name="build"]:checked').is("#villa")){
-                         //별장 주인 세팅 (플레이어1 이면 1 이 들어감)
-                            $(gamer.afterId).find(".player").text(player);
-                            //주인이없으면 별장 가격 세팅
-                            $(gamer.afterId).find(".gold").text(city.별장통행시);
-                            console.log("별장구매 전 머니", gamer.money);
-                            console.log("구매료 : ", city.대지료구매+city.별장구매);
-                             gamer.money = gamer.money-city.대지료구매-city.별장구매;
-                             console.log("별장구매 후 머니", gamer.money);
-                             $("#player"+player+"money").val(gamer.money);
-                             
-                      }
-                      if($('input[name="build"]:checked').is("#building")){
-                         //빌딩 주인 세팅 (플레이어1 이면 1 이 들어감)
-                            $(gamer.afterId).find(".player").text(player);
-                            //주인이없으면 빌딩 가격 세팅
-                            $(gamer.afterId).find(".gold").text(city.빌딩통행시);
-                            console.log("빌딩구매 전 머니", gamer.money);
-                            console.log("구매료 : ", city.대지료구매+city.빌딩구매);
-                             gamer.money = gamer.money-city.대지료구매-city.빌딩구매;
-                             console.log("빌딩구매 후 머니", gamer.money);
-                             $("#player"+player+"money").val(gamer.money);
-                      }
-                      if($('input[name="build"]:checked').is("#hotel")){
-                         //호텔 주인 세팅 (플레이어1 이면 1 이 들어감)
-                            $(gamer.afterId).find(".player").text(player);
-                            //호텔 가격 세팅
-                            $(gamer.afterId).find(".gold").text(city.호텔통행시);
-                            console.log("호텔구매 전 머니", gamer.money);
-                            console.log("구매료 : ", city.대지료구매+city.호텔구매);
-                             gamer.money = gamer.money-city.대지료구매-city.호텔구매;
-                             console.log("호텔구매 후 머니", gamer.money);
-                             $("#player"+player+"money").val(gamer.money);
-                      }
-                        //주사위 활성화
-                      $("#diceBtn").attr("disabled", false);
-                        //dialog 닫기
-                      $("#dialog").dialog("close");
-                      $("#dialog").remove();
-                   })
-                   $("#cancel").click(function(){
-                      //dialog 닫기
-                      $("#diceBtn").attr("disabled", false);
-                      $("#dialog").dialog("close");
-                      $("#dialog").remove();
-                   });
-               } else {
-            	 //황금열쇠 확인
-                   if($(gamer.afterId).find("goldenkey")) {
-       	                  let random = Math.floor(Math.random()*30+1);
-       	                  //let random = 1;
-       	               	  kard = KARD[random];
-       	                  console.log("황금열쇠 "+random);
-       	                  console.log(kard)
-       	                  setTimeout(function() {
-       	                  alert(kard);
-       	                  }, 0)
-       	                  //ISSUE: 이동하는 카드를 뽑으면 이동은 되지만, 다음 주사위를 굴릴때 전에 있던 위치에서 출발
-       	                  switch(random){
-       	                  	case 0:	//병원비 지불
-       	                  		minusMoney(player,50000);
-       	                  		break;
-       	                  	case 1:	//복권당첨
-	   	                  		plusMoney(player,200000);
-       	                  		break;
-       	                  		
-       	                  	case 2:	//무인도 탈출
-       	                  		//$("#playerItem").append("<button type='button' id='kwon'>무인도탈출권</button>");
-       	                  		break;
-       	                  	case 3: //무인도
-       	                  		cardMove(player,11,11);
-       	                  		break;
-       	                  	case 4: //파티초대권
-       	                  		
-       	                  		break;
-       	                  	case 5: //관광여행(제주)
-       	                  		cardMove(player,6,6);
-       	                  		break;
-       	                  	case 6: //과속운전벌금
-       	                  		minusMoney(player,50000);
-       	                  		break;
-       	                  	case 7: //해외유학
-       	                  		minusMoney(player,100000);
-       	                  		break;
-       	                  	case 8: //노후연금
-       	                  		plusMoney(player,50000);
-       	                  		break;
-       	                  	case 9: //이사(3칸 뒤로)
-       	                  		cardMove(player,gamer.beforePoint - 3,gamer.beforePoint - 3);
-       	                  		break;
-       	                  	case 10: // 고속도로
-       	                  		cardMove(player,1,1);
-       	                  		break;
-       	        	            /*
-       	        	           	 만약에 한바퀴 도는거면 + 20만원
-       	        	            */
-       	                  	case 11: //우승
-       	                  		plusMoney(player,100000);
-	   	                  		break;
-       	                  	case 12: //우대권
-       	                  		//$("#playerItem").append("<button type='button' id='udae'>우대권</button>");
-       	                  		break;
-       	                  	case 13: //항공여행(콩코드 -> 타이페이)
-       	                  		cardMove(player,2,2);
-       	                  		break;
-       	                  		/*
-       	                  		만약에 콩코드 여객기를 누군가 가지고 있으면 결제, 타이페이도 마찬가지로 결제
-       	                  		*/
-       	                  	case 14: //건물수리비
-       	                  		/*
-       	                  		플레이어가 가지고 있는 건물을 호텔, 빌딩 , 별장의 갯수만큼 아래 가격과 합산해서 결제
-       	                  		호텔--10만원  빌딩--6만원 별장--3만원
-       	                  		*/
-       	                  		break;
-       	                  	case 15: //방범비
-       	                  		/*
-       	                  		호텔--5만원  빌딩--3만원 별장--1만원
-       	                  		*/
-       	                  		break;
-       	                  	case 16: //유람선여행(퀸엘리자베스-> 베이징)
-       	                  		cardMove(player,4,4)
-       	                  		break;
-       	                  		/*
-       	                  		퀸엘리자베스호 결제, 베이징 결제
-       	                  		*/
-       	                  	case 17: //관광여행(부산)
-       	                  		cardMove(player,26,26)
-       	                  		break;
-       	                  		/*
-       	                  		부산 결제
-       	                  		*/
-       	                  	case 18: // 생일 축하
-       	                  		let birth =  10000 * (allPlayer-1);
-       	                  		plusMoney(player,birth);
-       	                  		break;
-       	                  	case 19: //장학금 혜택
-       	                  		plusMoney(player,100000);
-       	                  		break;
-       	                  	case 20: //종합소득세
-       	                  		/*
-       	                  		호텔-- 15만원  빌딩-- 10만원  별장--3만원
-       	                  		플레이어가 가지고 있는 호텔 빌딩 별장수 만큼 결제
-       	                  		*/
-       	                  		break;
-       	                  	case 21: //노벨평화상
-       	                  		plusMoney(player,300000);
-	   	                  		break;
-       	                  	case 22: //관광여행(서울)
-       	                  		cardMove(player,40,40);
-       	                  		break;
-       	                  		/*
-       	                  		서울에서 결제
-       	                  		*/
-       	                  	case 23: //반액대매출
-       	                  		/*
-       	                  		가지고 있는 곳 중에 건물가격 포함해서 가장 비싼 곳을 반값에 판매
-       	                  		*/
-       	                  		break;
-       	                  	case 24: //우주여행 초청장
-       	                  		cardMove(player,31,31);
-       	                  		break;
-       	                  	case 25: //우대권
-       	                  		//$("#playerItem").append("<button type='button' id='udae'>우대권</button>");
-       	                  	case 26: //세계일주 초대권
-       	                  		plusMoney(player,200000);
-	   	                  		break;
-       	                  	case 27: //이사(뒤로 두칸)
-       	                  		cardMove(player,beforePoint - 2,beforePoint - 2)
-       	                  		break;
-       	                  	case 28: //사회복지기금배당
-       	                  		cardMove(player,39,39)
-       	                  		minusMoney(player,150000);
-       	                  		break;
-       	                  		/*
-       	                  		15만원을 사회복지기금에 배당
-       	                  		*/
-       	                  	case 29: //반액대매출
-       	                  		/*
-       	                  		가지고 있는 곳 중에 건물가격 포함해서 가장 비싼 곳을 반값에 판매
-       	                  		*/
-       	                  		break;	
-       	                  		
-       	                  }
-       	            }//무인도 도착
-                   else if($(gamer.afterId).find("island")){
-       	            	console.log("무인도 도착");
-       	            }//사회복지기금
-       	            else if($(gamer.afterId).find("found")){
-       	            	console.log("사회복지기금 수령")
-       	            }//우주여행
-       	            else if($(gamer.afterId).find("spacetravel")){
-       	            	console.log("우주여행")
-       	            }else if($(gamer.afterId).find("donate")){
-       	            	console.log("기부하기")
-       	            }
-                  $("#dialog").remove();
-               }
-            } else {
-               //주인이 있으면 땅 가격만큼 가진 돈에서 차감
-               console.log("결제 전 머니: ", gamer.money);
-               gamer.money = gamer.money-($(gamer.afterId).find(".gold").text());
-               console.log("결제 후 머니: ", gamer.money);
-               $("#player"+player+"money").val(gamer.money);
-               $("#dialog").remove();
-            }
+	               if(city != null){
+	                  //땅 구매여부를 선택할때까지 주사위 비활성화
+	                   $("#diceBtn").attr("disabled", true);
+	                   $("#dialog").dialog();
+	                   if(city == 제주도 || city == 콩코드여객기 || city == 부산 || city == 퀸엘리자베스호 || city == 콜럼비아호 || city == 서울){
+	                      $("#villa").attr("disabled", true);
+	                      $("#building").attr("disabled", true);
+	                      $("#hotel").attr("disabled", true);
+	                   } else {
+	                      $("#villa").attr("disabled", false);
+	                      $("#building").attr("disabled", false);
+	                      $("#hotel").attr("disabled", false);
+	                   }
+	                   $("#landToll").text(" 통행료 "+ city.대지료통행시+"원");
+	                   $("#villaToll").text(" 통행료 "+ city.별장통행시+"원");
+	                   $("#buildingToll").text(" 통행료 "+ city.빌딩통행시+"원");
+	                   $("#hotelToll").text(" 통행료 "+ city.호텔통행시+"원");
+	                   $("#buy").click(function(){
+	                      console.log("buy 클릭 실행!");
+	                      console.log("buy player : ", player);
+	                      if($('input[name="build"]:checked').is("#land")){
+	                         console.log("땅 구매 : ", player);
+	                         //땅 주인 세팅 (플레이어1 이면 1 이 들어감)
+	                            $(gamer.afterId).find(".player").text(player);
+	                             //주인이없으면 땅 가격 세팅
+	                             $(gamer.afterId).find(".gold").text(city.대지료통행시);
+	                             console.log("대지료구매 전 머니", gamer.money);
+	                             console.log("구매료 : ", city.대지료구매);
+	                             gamer.money = gamer.money-city.대지료구매;
+	                             console.log("대지료구매 후 머니", gamer.money);
+	                             $("#player"+player+"money").val(gamer.money);
+	                      }
+	                      if($('input[name="build"]:checked').is("#villa")){
+	                         //별장 주인 세팅 (플레이어1 이면 1 이 들어감)
+	                            $(gamer.afterId).find(".player").text(player);
+	                            //주인이없으면 별장 가격 세팅
+	                            $(gamer.afterId).find(".gold").text(city.별장통행시);
+	                            console.log("별장구매 전 머니", gamer.money);
+	                            console.log("구매료 : ", city.대지료구매+city.별장구매);
+	                             gamer.money = gamer.money-city.대지료구매-city.별장구매;
+	                             console.log("별장구매 후 머니", gamer.money);
+	                             $("#player"+player+"money").val(gamer.money);
+	                             
+	                      }
+	                      if($('input[name="build"]:checked').is("#building")){
+	                         //빌딩 주인 세팅 (플레이어1 이면 1 이 들어감)
+	                            $(gamer.afterId).find(".player").text(player);
+	                            //주인이없으면 빌딩 가격 세팅
+	                            $(gamer.afterId).find(".gold").text(city.빌딩통행시);
+	                            console.log("빌딩구매 전 머니", gamer.money);
+	                            console.log("구매료 : ", city.대지료구매+city.빌딩구매);
+	                             gamer.money = gamer.money-city.대지료구매-city.빌딩구매;
+	                             console.log("빌딩구매 후 머니", gamer.money);
+	                             $("#player"+player+"money").val(gamer.money);
+	                      }
+	                      if($('input[name="build"]:checked').is("#hotel")){
+	                         //호텔 주인 세팅 (플레이어1 이면 1 이 들어감)
+	                            $(gamer.afterId).find(".player").text(player);
+	                            //호텔 가격 세팅
+	                            $(gamer.afterId).find(".gold").text(city.호텔통행시);
+	                            console.log("호텔구매 전 머니", gamer.money);
+	                            console.log("구매료 : ", city.대지료구매+city.호텔구매);
+	                             gamer.money = gamer.money-city.대지료구매-city.호텔구매;
+	                             console.log("호텔구매 후 머니", gamer.money);
+	                             $("#player"+player+"money").val(gamer.money);
+	                      }
+	                        //주사위 활성화
+	                      $("#diceBtn").attr("disabled", false);
+	                        //dialog 닫기
+	                      $("#dialog").dialog("close");
+	                      $("#dialog").remove();
+	                   })
+	                   $("#cancel").click(function(){
+	                      //dialog 닫기
+	                      $("#diceBtn").attr("disabled", false);
+	                      $("#dialog").dialog("close");
+	                      $("#dialog").remove();
+	                   });
+	               } 
+               
+              else {
+              //주인이 있으면 땅 가격만큼 가진 돈에서 차감
+              console.log("결제 전 머니: ", gamer.money);
+              gamer.money = gamer.money-($(gamer.afterId).find(".gold").text());
+              console.log("결제 후 머니: ", gamer.money);
+              $("#player"+player+"money").val(gamer.money);
+              $("#dialog").remove();
+           }
       });
    });
 </script>
