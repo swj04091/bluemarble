@@ -321,11 +321,11 @@
 	                   $("#hotelToll").text(" 통행료 "+ city.호텔통행시+"원");
 	                   $("#buy").click(function(){
 	                      console.log("buy 클릭 실행!");
-	                      console.log("buy player : ", player);
+	                      console.log("buy player : ", gamer.player);
 	                      if($('input[name="build"]:checked').is("#land")){
 	                         console.log("땅 구매 : ", player);
 	                         //땅 주인 세팅 (플레이어1 이면 1 이 들어감)
-	                            $(gamer.afterId).find(".player").text(player);
+	                            $(gamer.afterId).find(".player").text(gamer.player);
 	                             //주인이없으면 땅 가격 세팅
 	                             $(gamer.afterId).find(".gold").text(city.대지료통행시);
 	                             console.log("대지료구매 전 머니", gamer.money);

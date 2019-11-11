@@ -372,7 +372,7 @@ $(document).ready(function(){
            else{
         	   console.log("City");
         	   if ($(gamer.afterId).find(".player").text() == 0) {
-        		    console.log("City에 진입한 플레이어: "+player);
+        		    console.log("City에 진입한 플레이어: "+gamer.player);
         			cityName = $(gamer.afterId).find(".city").text();
         			console.log("cityName : ", cityName);
         			let city = "";
@@ -483,25 +483,25 @@ $(document).ready(function(){
         					$("#building").attr("disabled", false);
         					$("#hotel").attr("disabled", false);
         				}
-        				$("#landToll").text(" 통행료 " + city.대지료통행시 + "원");
-        				$("#villaToll").text(" 통행료 " + city.별장통행시 + "원");
-        				$("#buildingToll").text(" 통행료 " + city.빌딩통행시 + "원");
-        				$("#hotelToll").text(" 통행료 " + city.호텔통행시 + "원");
-        				console.log(player);
+        				$("#landToll").text(" 구매가 " + city.대지료구매+ "원");
+        				$("#villaToll").text(" 구매가 " + city.별장구매 + "원");
+        				$("#buildingToll").text(" 구매가 " + city.빌딩구매 + "원");
+        				$("#hotelToll").text(" 구매가 " + city.호텔구매 + "원");
+        				console.log(gamer.player);
         				$("#buy").click(function() {
         					console.log("buy 클릭 실행!");
-        					console.log("buy player : ", player);
+        					console.log("buy player : ", gamer.player);
         					if ($('input[name="build"]:checked').is("#land")) {
         						console.log("땅 구매 : ", player);
         						//땅 주인 세팅 (플레이어1 이면 1 이 들어감)
-        						$(gamer.afterId).find(".player").text(player);
+        						$(gamer.afterId).find(".player").text(gamer.player);
         						//주인이없으면 땅 가격 세팅
         						$(gamer.afterId).find(".gold").text(city.대지료통행시);
         						console.log("대지료구매 전 머니", gamer.money);
         						console.log("구매료 : ", city.대지료구매);
         						gamer.money = gamer.money - city.대지료구매;
         						console.log("대지료구매 후 머니", gamer.money);
-        						$("#player" + player + "money").val(gamer.money);
+        						$("#player" + gamer.player + "money").val(gamer.money);
         					}
         					if ($('input[name="build"]:checked').is("#villa")) {
         						//별장 주인 세팅 (플레이어1 이면 1 이 들어감)
@@ -512,19 +512,19 @@ $(document).ready(function(){
         						console.log("구매료 : ", city.대지료구매 + city.별장구매);
         						gamer.money = gamer.money - city.대지료구매 - city.별장구매;
         						console.log("별장구매 후 머니", gamer.money);
-        						$("#player" + player + "money").val(gamer.money);
+        						$("#player" + gamer.player + "money").val(gamer.money);
 
         					}
         					if ($('input[name="build"]:checked').is("#building")) {
         						//빌딩 주인 세팅 (플레이어1 이면 1 이 들어감)
-        						$(gamer.afterId).find(".player").text(player);
+        						$(gamer.afterId).find(".player").text(gamer.player);
         						//주인이없으면 빌딩 가격 세팅
         						$(gamer.afterId).find(".gold").text(city.빌딩통행시);
         						console.log("빌딩구매 전 머니", gamer.money);
         						console.log("구매료 : ", city.대지료구매 + city.빌딩구매);
         						gamer.money = gamer.money - city.대지료구매 - city.빌딩구매;
         						console.log("빌딩구매 후 머니", gamer.money);
-        						$("#player" + player + "money").val(gamer.money);
+        						$("#player" + gamer.player + "money").val(gamer.money);
         					}
         					if ($('input[name="build"]:checked').is("#hotel")) {
         						//호텔 주인 세팅 (플레이어1 이면 1 이 들어감)
@@ -535,7 +535,7 @@ $(document).ready(function(){
         						console.log("구매료 : ", city.대지료구매 + city.호텔구매);
         						gamer.money = gamer.money - city.대지료구매 - city.호텔구매;
         						console.log("호텔구매 후 머니", gamer.money);
-        						$("#player" + player + "money").val(gamer.money);
+        						$("#player" + gamer.player + "money").val(gamer.money);
         					}
         					//주사위 활성화
         					$("#diceBtn").attr("disabled", false);
@@ -555,7 +555,7 @@ $(document).ready(function(){
         				console.log("결제 전 머니: ", gamer.money);
         				gamer.money = gamer.money - ($(gamer.afterId).find(".gold").text());
         				console.log("결제 후 머니: ", gamer.money);
-        				$("#player" + player + "money").val(gamer.money);
+        				$("#player" + gamer.player + "money").val(gamer.money);
         				$("#dialog").remove();
         			}
         		}
