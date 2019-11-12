@@ -343,6 +343,7 @@ $(document).ready(function(){
            // 무인도로 갔을때
            else if(gamer.afterId == "#p11"){
         	   console.log("무인도 도착");
+        	   gamer.round = island(gamer, ran1, ran2);
         	   $("#dialog").remove();
            }
            // 사회복지기금으로 갔을때
@@ -358,6 +359,25 @@ $(document).ready(function(){
            else if(gamer.afterId == "#p31"){
         	   console.log("우주여행");
         	   $("#dialog").remove();
+	        	 //주사위 버튼 잠금
+	           	$("#diceBtn").attr("disabled", true);
+	           	console.log("우주여행 시작!");
+	           	$(".place").on("click", function(){
+	           		console.log("우주여행 클릭!");
+	           		gamer.beforeId = "#p" + gamer.beforePoint;
+	           		console.log("우주여행 gamer.beforePoint", gamer.beforePoint);
+	           		gamer.afterPoint = $(this).find(".placePoint").text();
+	           		gamer.afterId = "#p" + gamer.afterPoint;
+	           		console.log("우주여행 gamer.afterPoint", gamer.afterPoint);
+	           		$(gamer.beforeId).find(".btn-danger"+gamer.player).remove();
+	           		$(this).append("<img class='btn-danger"+gamer.player+"' src='/jquery-prac/image/pic0"+gamer.player+".jpg'>");
+	           		gamer.beforePoint = parseInt(gamer.afterPoint);
+	           		gamer.round = 0;
+	           		//테이블 클릭잠금
+	               	$(".place").off("click");
+	               	//주사위 버튼 잠금 해제
+	               	$("#diceBtn").attr("disabled", false);
+           	});
            }
            //사회복지기금 접수터로 갔을때
            else if(gamer.afterId == "#p39"){
@@ -372,194 +392,193 @@ $(document).ready(function(){
            else{
         	   console.log("City");
         	   if ($(gamer.afterId).find(".player").text() == 0) {
-        		    console.log("City에 진입한 플레이어: "+gamer.player);
-        			cityName = $(gamer.afterId).find(".city").text();
-        			console.log("cityName : ", cityName);
-        			let city = "";
-        			switch (cityName) {
-        			case "타이페이":
-        				city = 타이페이;
-        				break;
-        			case "베이징":
-        				city = 베이징;
-        				break;
-        			case "마닐라":
-        				city = 마닐라;
-        				break;
-        			case "제주도":
-        				city = 제주도;
-        				break;
-        			case "싱가포르":
-        				city = 싱가포르;
-        				break;
-        			case "카이로":
-        				city = 카이로;
-        				break;
-        			case "이스탄불":
-        				city = 이스탄불;
-        				break;
-        			case "아테네":
-        				city = 아테네;
-        				break;
-        			case "코펜하겐":
-        				city = 코펜하겐;
-        				break;
-        			case "스톡홀름":
-        				city = 스톡홀름;
-        				break;
-        			case "콩코드여객기":
-        				city = 콩코드여객기;
-        				break;
-        			case "베른":
-        				city = 베른;
-        				break;
-        			case "베를린":
-        				city = 베를린;
-        				break;
-        			case "오타와":
-        				city = 오타와;
-        				break;
-        			case "부에노스아이레스":
-        				city = 부에노스아이레스;
-        				break;
-        			case "상파울로":
-        				city = 상파울로;
-        				break;
-        			case "시드니":
-        				city = 시드니;
-        				break;
-        			case "부산":
-        				city = 부산;
-        				break;
-        			case "하와이":
-        				city = 하와이;
-        				break;
-        			case "리스본":
-        				city = 리스본;
-        				break;
-        			case "퀸엘리자베스호":
-        				city = 퀸엘리자베스호;
-        				break;
-        			case "마드리드":
-        				city = 마드리드;
-        				break;
-        			case "도쿄":
-        				city = 도쿄;
-        				break;
-        			case "콜럼비아호":
-        				city = 콜럼비아호;
-        				break;
-        			case "파리":
-        				city = 파리;
-        				break;
-        			case "로마":
-        				city = 로마;
-        				break;
-        			case "런던":
-        				city = 런던;
-        				break;
-        			case "뉴욕":
-        				city = 뉴욕;
-        				break;
-        			case "서울":
-        				city = 서울;
-        				break;
-        			default:
-        				city = null;
-        				break;
-        			}
-        			console.log(city);
-        			if (city != null) {
-        				//땅 구매여부를 선택할때까지 주사위 비활성화
-        				$("#diceBtn").attr("disabled", true);
-        				$("#dialog").dialog();
-        				if (city == 제주도 || city == 콩코드여객기 || city == 부산 || city == 퀸엘리자베스호
-        						|| city == 콜럼비아호 || city == 서울) {
-        					$("#villa").attr("disabled", true);
-        					$("#building").attr("disabled", true);
-        					$("#hotel").attr("disabled", true);
-        				} else {
-        					$("#villa").attr("disabled", false);
-        					$("#building").attr("disabled", false);
-        					$("#hotel").attr("disabled", false);
-        				}
-        				$("#landToll").text(" 구매가 " + city.대지료구매+ "원");
-        				$("#villaToll").text(" 구매가 " + city.별장구매 + "원");
-        				$("#buildingToll").text(" 구매가 " + city.빌딩구매 + "원");
-        				$("#hotelToll").text(" 구매가 " + city.호텔구매 + "원");
-        				console.log(gamer.player);
-        				$("#buy").click(function() {
-        					console.log("buy 클릭 실행!");
-        					console.log("buy player : ", gamer.player);
-        					if ($('input[name="build"]:checked').is("#land")) {
-        						console.log("땅 구매 : ", player);
-        						//땅 주인 세팅 (플레이어1 이면 1 이 들어감)
-        						$(gamer.afterId).find(".player").text(gamer.player);
-        						//주인이없으면 땅 가격 세팅
-        						$(gamer.afterId).find(".gold").text(city.대지료통행시);
-        						console.log("대지료구매 전 머니", gamer.money);
-        						console.log("구매료 : ", city.대지료구매);
-        						gamer.money = gamer.money - city.대지료구매;
-        						console.log("대지료구매 후 머니", gamer.money);
-        						$("#player" + gamer.player + "money").val(gamer.money);
-        					}
-        					if ($('input[name="build"]:checked').is("#villa")) {
-        						//별장 주인 세팅 (플레이어1 이면 1 이 들어감)
-        						$(gamer.afterId).find(".player").text(player);
-        						//주인이없으면 별장 가격 세팅
-        						$(gamer.afterId).find(".gold").text(city.별장통행시);
-        						console.log("별장구매 전 머니", gamer.money);
-        						console.log("구매료 : ", city.대지료구매 + city.별장구매);
-        						gamer.money = gamer.money - city.대지료구매 - city.별장구매;
-        						console.log("별장구매 후 머니", gamer.money);
-        						$("#player" + gamer.player + "money").val(gamer.money);
-
-        					}
-        					if ($('input[name="build"]:checked').is("#building")) {
-        						//빌딩 주인 세팅 (플레이어1 이면 1 이 들어감)
-        						$(gamer.afterId).find(".player").text(gamer.player);
-        						//주인이없으면 빌딩 가격 세팅
-        						$(gamer.afterId).find(".gold").text(city.빌딩통행시);
-        						console.log("빌딩구매 전 머니", gamer.money);
-        						console.log("구매료 : ", city.대지료구매 + city.빌딩구매);
-        						gamer.money = gamer.money - city.대지료구매 - city.빌딩구매;
-        						console.log("빌딩구매 후 머니", gamer.money);
-        						$("#player" + gamer.player + "money").val(gamer.money);
-        					}
-        					if ($('input[name="build"]:checked').is("#hotel")) {
-        						//호텔 주인 세팅 (플레이어1 이면 1 이 들어감)
-        						$(gamer.afterId).find(".player").text(player);
-        						//호텔 가격 세팅
-        						$(gamer.afterId).find(".gold").text(city.호텔통행시);
-        						console.log("호텔구매 전 머니", gamer.money);
-        						console.log("구매료 : ", city.대지료구매 + city.호텔구매);
-        						gamer.money = gamer.money - city.대지료구매 - city.호텔구매;
-        						console.log("호텔구매 후 머니", gamer.money);
-        						$("#player" + gamer.player + "money").val(gamer.money);
-        					}
-        					//주사위 활성화
-        					$("#diceBtn").attr("disabled", false);
-        					//dialog 닫기
-        					$("#dialog").dialog("close");
-        					$("#dialog").remove();
-        				})
-        				$("#cancel").click(function() {
-        					//dialog 닫기
-        					$("#diceBtn").attr("disabled", false);
-        					$("#dialog").remove();
-        				});
-        			}
-
-        			else {
-        				//주인이 있으면 땅 가격만큼 가진 돈에서 차감
-        				console.log("결제 전 머니: ", gamer.money);
-        				gamer.money = gamer.money - ($(gamer.afterId).find(".gold").text());
-        				console.log("결제 후 머니: ", gamer.money);
-        				$("#player" + gamer.player + "money").val(gamer.money);
-        				$("#dialog").remove();
-        			}
-        		}
-        	   
+       		    console.log("City에 진입한 플레이어: "+gamer.player);
+       			cityName = $(gamer.afterId).find(".city").text();
+       			console.log("cityName : ", cityName);
+       			let city = "";
+       			switch (cityName) {
+	       			case "타이페이":
+	       				city = 타이페이;
+	       				break;
+	       			case "베이징":
+	       				city = 베이징;
+	       				break;
+	       			case "마닐라":
+	       				city = 마닐라;
+	       				break;
+	       			case "제주도":
+	       				city = 제주도;
+	       				break;
+	       			case "싱가포르":
+	       				city = 싱가포르;
+	       				break;
+	       			case "카이로":
+	       				city = 카이로;
+	       				break;
+	       			case "이스탄불":
+	       				city = 이스탄불;
+	       				break;
+	       			case "아테네":
+	       				city = 아테네;
+	       				break;
+	       			case "코펜하겐":
+	       				city = 코펜하겐;
+	       				break;
+	       			case "스톡홀름":
+	       				city = 스톡홀름;
+	       				break;
+	       			case "콩코드여객기":
+	       				city = 콩코드여객기;
+	       				break;
+	       			case "베른":
+	       				city = 베른;
+	       				break;
+	       			case "베를린":
+	       				city = 베를린;
+	       				break;
+	       			case "오타와":
+	       				city = 오타와;
+	       				break;
+	       			case "부에노스아이레스":
+	       				city = 부에노스아이레스;
+	       				break;
+	       			case "상파울로":
+	       				city = 상파울로;
+	       				break;
+	       			case "시드니":
+	       				city = 시드니;
+	       				break;
+	       			case "부산":
+	       				city = 부산;
+	       				break;
+	       			case "하와이":
+	       				city = 하와이;
+	       				break;
+	       			case "리스본":
+	       				city = 리스본;
+	       				break;
+	       			case "퀸엘리자베스호":
+	       				city = 퀸엘리자베스호;
+	       				break;
+	       			case "마드리드":
+	       				city = 마드리드;
+	       				break;
+	       			case "도쿄":
+	       				city = 도쿄;
+	       				break;
+	       			case "콜럼비아호":
+	       				city = 콜럼비아호;
+	       				break;
+	       			case "파리":
+	       				city = 파리;
+	       				break;
+	       			case "로마":
+	       				city = 로마;
+	       				break;
+	       			case "런던":
+	       				city = 런던;
+	       				break;
+	       			case "뉴욕":
+	       				city = 뉴욕;
+	       				break;
+	       			case "서울":
+	       				city = 서울;
+	       				break;
+	       			default:
+	       				city = null;
+	       				break;
+	       			}
+       			console.log(city);
+    			if (city != null) {
+    				//땅 구매여부를 선택할때까지 주사위 비활성화
+    				$("#diceBtn").attr("disabled", true);
+    				$("#dialog").dialog();
+    				if (city == 제주도 || city == 콩코드여객기 || city == 부산 || city == 퀸엘리자베스호
+    						|| city == 콜럼비아호 || city == 서울) {
+    					$("#villa").attr("disabled", true);
+    					$("#building").attr("disabled", true);
+    					$("#hotel").attr("disabled", true);
+    				} else {
+    					$("#villa").attr("disabled", false);
+    					$("#building").attr("disabled", false);
+    					$("#hotel").attr("disabled", false);
+    				}
+    				$("#landToll").text(" 구매가 " + city.대지료구매+ "원");
+    				$("#villaToll").text(" 구매가 " + city.별장구매 + "원");
+    				$("#buildingToll").text(" 구매가 " + city.빌딩구매 + "원");
+    				$("#hotelToll").text(" 구매가 " + city.호텔구매 + "원");
+    				console.log(gamer.player);
+	    				$("#buy").click(function() {
+	    					console.log("buy 클릭 실행!");
+	    					console.log("buy player : ", gamer.player);
+	    					if ($('input[name="build"]:checked').is("#land")) {
+	    						console.log("땅 구매 : ", player);
+	    						//땅 주인 세팅 (플레이어1 이면 1 이 들어감)
+	    						$(gamer.afterId).find(".player").text(gamer.player);
+	    						//주인이없으면 땅 가격 세팅
+	    						$(gamer.afterId).find(".gold").text(city.대지료통행시);
+	    						console.log("대지료구매 전 머니", gamer.money);
+	    						console.log("구매료 : ", city.대지료구매);
+	    						gamer.money = gamer.money - city.대지료구매;
+	    						console.log("대지료구매 후 머니", gamer.money);
+	    						$("#player" + gamer.player + "money").val(gamer.money);
+	    					}
+	    					if ($('input[name="build"]:checked').is("#villa")) {
+	    						//별장 주인 세팅 (플레이어1 이면 1 이 들어감)
+	    						$(gamer.afterId).find(".player").text(player);
+	    						//주인이없으면 별장 가격 세팅
+	    						$(gamer.afterId).find(".gold").text(city.별장통행시);
+	    						console.log("별장구매 전 머니", gamer.money);
+	    						console.log("구매료 : ", city.대지료구매 + city.별장구매);
+	    						gamer.money = gamer.money - city.대지료구매 - city.별장구매;
+	    						console.log("별장구매 후 머니", gamer.money);
+	    						$("#player" + gamer.player + "money").val(gamer.money);
+	
+	    					}
+	    					if ($('input[name="build"]:checked').is("#building")) {
+	    						//빌딩 주인 세팅 (플레이어1 이면 1 이 들어감)
+	    						$(gamer.afterId).find(".player").text(gamer.player);
+	    						//주인이없으면 빌딩 가격 세팅
+	    						$(gamer.afterId).find(".gold").text(city.빌딩통행시);
+	    						console.log("빌딩구매 전 머니", gamer.money);
+	    						console.log("구매료 : ", city.대지료구매 + city.빌딩구매);
+	    						gamer.money = gamer.money - city.대지료구매 - city.빌딩구매;
+	    						console.log("빌딩구매 후 머니", gamer.money);
+	    						$("#player" + gamer.player + "money").val(gamer.money);
+	    					}
+	    					if ($('input[name="build"]:checked').is("#hotel")) {
+	    						//호텔 주인 세팅 (플레이어1 이면 1 이 들어감)
+	    						$(gamer.afterId).find(".player").text(player);
+	    						//호텔 가격 세팅
+	    						$(gamer.afterId).find(".gold").text(city.호텔통행시);
+	    						console.log("호텔구매 전 머니", gamer.money);
+	    						console.log("구매료 : ", city.대지료구매 + city.호텔구매);
+	    						gamer.money = gamer.money - city.대지료구매 - city.호텔구매;
+	    						console.log("호텔구매 후 머니", gamer.money);
+	    						$("#player" + gamer.player + "money").val(gamer.money);
+	    					}
+	    					//주사위 활성화
+	    					$("#diceBtn").attr("disabled", false);
+	    					//dialog 닫기
+	    					$("#dialog").dialog("close");
+	    					$("#dialog").remove();
+	    				})
+	    				$("#cancel").click(function() {
+	    					//dialog 닫기
+	    					$("#diceBtn").attr("disabled", false);
+	    					$("#dialog").remove();
+	    				});
+	    			}
+       			}
+       			else {
+    				//주인이 있으면 땅 가격만큼 가진 돈에서 차감
+    				console.log("결제 전 머니: ", gamer.money);
+    				gamer.money = gamer.money - ($(gamer.afterId).find(".gold").text());
+    				console.log("결제 후 머니: ", gamer.money);
+    				$("#player" + gamer.player + "money").val(gamer.money);
+    				$("#dialog").remove();
+    			}
+       			
            }
            
            player = doubleDice(ran1, ran2, player, allPlayer);

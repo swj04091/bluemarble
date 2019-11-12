@@ -44,3 +44,17 @@ function doubleDice(ran1, ran2, player, allPlayer){
     return player;
 }
 
+function island(gamer, ran1, ran2){
+	//무인도 도착
+    console.log("무인도 함수 실행 확인!");
+    console.log("무인도에 빠짐");
+	if(gamer.round>3 || ran1 == ran2){//3번 차례가 지나거나 ,주사위가 더블일때
+		console.log("무인도 탈출!");
+    	gamer.round = 0;
+	}else{
+		console.log("무인도 잔류..");
+		gamer.round+=1;
+	}
+    
+    return gamer.round;
+}
